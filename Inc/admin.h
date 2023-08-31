@@ -1,6 +1,33 @@
-//	Date: 20230831 靳浩然
+/*
+__ /\\\\\\\\\\\_        _____ /\\\\\\\\\\\___        __/\\\\____________/\\\\_        _____/\\\\\\\\\\\___
+  _\/////\\\///__         ___/\\\/////////\\\_        _\/\\\\\\________/\\\\\\_        ___/\\\/////////\\\_
+   _____\/\\\_____         __\//\\\______\///__        _\/\\\//\\\____/\\\//\\\_        __\//\\\______\///__
+	_____\/\\\_____         ___\////\\\_________        _\/\\\\///\\\/\\\/_\/\\\_        ___\////\\\_________
+	 _____\/\\\_____         ______\////\\\______        _\/\\\__\///\\\/___\/\\\_        ______\////\\\______
+	  _____\/\\\_____         _________\////\\\___        _\/\\\____\///_____\/\\\_        _________\////\\\___
+	   _____\/\\\_____         __/\\\______\//\\\__        _\/\\\_____________\/\\\_        __/\\\______\//\\\__
+		__/\\\\\\\\\\\_         _\///\\\\\\\\\\\/___        _\/\\\_____________\/\\\_        _\///\\\\\\\\\\\/___
+		 _\///////////__         ___\///////////_____        _\///______________\///__        ___\///////////_____
+*/
 
-#define _PACK( __Declaration__ ) __pragma( pack(push, 1) ) __Declaration__ __pragma( pack(pop))
+/**
+  ******************************************************************************
+  * @File					: admin.h
+  * @Brief					: admin operations header file
+  * @Description		    : 管理员操作函数头文件
+  * @Author					: 靳浩然
+  * @Created Date			: 2023/8/28
+  * @Last modified date		: 2023/8/31
+  * @Github repositorie URL	: https://github.com/jhr419/ISMS-BUPT-International-College-Term-Project.git
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2023
+  * All rights reserved.</center></h2>
+  *
+  ******************************************************************************
+  */
+
 
 #ifndef __ADMIN_H
 #define __ADMIN_H
@@ -13,7 +40,7 @@
 
 //fuc1 done,场馆名称查场地信息，需要之后把ID改为名称
 //接收完，需要判断是否为空数组
-extern SiteInfo* querySiteIDByVenueID(SiteInfoNode* head, char siteVenueID[11]);
+extern SiteInfo* querySiteInfoByVenueName(SiteInfoNode* head, char siteVenueName[11]);
 
 //fuc2 done 管理员id查场地订单
 /**
@@ -31,19 +58,4 @@ extern ApmtInfo* querySiteOrderInfo(AdminInfoNode* AdminNodehead, SiteInfoNode* 
   * @retval			SiteInfo：排序后的场地信息指针数组
   */
 
-
-//extern SiteInfo_t* sortByOrder(void);
-//
-////排序场地热门预定时间
-//extern uint8_t* sortSiteHotTime(uint8_t SiteId);
-//
-//extern uint32_t SiteTurnover(uint8_t SiteId);
-//
-//extern SiteInfo_t* sortByTurnover(uint8_t* AdminId);
-//
-//extern SiteInfo_t* sortByTime(OrderTime_e Time);
-//
-//extern Status_e addSite(SiteInfo_t NewSite);
-//
-//extern AdminInfo_t queryAdminById(uint8_t* AdminId);
 #endif // !__ADMIN_H

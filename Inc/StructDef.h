@@ -51,7 +51,7 @@ typedef struct _AdminInfo
 	char adminPhone[12];				//管理员手机号，11个字符
 	char adminPwd[21];					//管理员密码，20个字符以内
 	char adminEmail[41];				//管理员邮箱，40个字符以内
-	char adminVenueID[11];				//管理员管理的场馆ID，6-10个字符
+	char adminVenueName[11];				//管理员管理的场馆名称，6-10个字符
 } AdminInfo;
 
 //管理员个人信息链表节点
@@ -69,7 +69,7 @@ typedef struct _SiteInfo
 	char siteID[11];					//场地ID，6-10个字符
 	char siteName[16];					//场地名称，15个字符以内
 	char siteLocation[256];				//场地位置，20个字符以内
-	char siteVenueID[11];				//场地所属的场馆ID，6-10个字符
+	char siteVenueName[11];				//场地所属的场馆名称，6-10个字符
 	char siteSportsType[11];			//场地的运动类型，10个字符以内
 	char siteIntro[101];				//场地简介，100个字符以内
 	int siteAllowedAge;					//场地准入年龄，整型
