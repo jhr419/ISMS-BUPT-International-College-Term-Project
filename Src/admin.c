@@ -173,4 +173,5 @@ int cntSiteTurnover(AppointmentInfoNode* head, char strSiteID[11])
 	int* cntBuf;
 	cntBuf = cntSiteTime(head, strSiteID);
 	Turnover *= Rent * (sizeof(cntBuf) / sizeof(cntBuf[0]));//todo:×â½ðRentÎ´¶¨Òå
+	return Turnover;
 }
