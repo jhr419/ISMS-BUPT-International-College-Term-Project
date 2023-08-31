@@ -3,6 +3,8 @@
 #include "admin.h"
 #include "DataToolKit.c"
 
+#define Rent 100//人为定义每小时租金100
+
 //new
 //fuc1 done,场馆名称查场地信息，需要之后把ID改为名称
 //接收完，需要判断是否为空数组
@@ -174,4 +176,80 @@ int cntSiteTurnover(AppointmentInfoNode* head, char strSiteID[11])
 	cntBuf = cntSiteTime(head, strSiteID);
 	Turnover *= Rent * (sizeof(cntBuf) / sizeof(cntBuf[0]));//todo:租金Rent未定义
 	return Turnover;
+}
+
+
+//fuc6
+
+//fuc7 按营业额排序场馆内所有场地
+
+//fuc7-1 结构体数组排序,倒序
+// 比较函数，用于排序
+int compare(const void* a, const void* b) {
+	return ((SiteInfo*)b)->turnover - ((SiteInfo*)a)->turnover;
+}
+
+// 函数：对结构体数组按照 turnover 排序
+void sortStructArray(struct SiteInfo arr[], int size) {
+	qsort(arr, size, sizeof(SiteInfo), compare);
+}
+
+//main
+SiteInfo* sortSiteByTurnover(AdminInfoNode* AdminNodehead, SiteInfoNode* SiteNodehead, AppointmentInfoNode* ApmtNodehead, char adminID[11])
+{
+
+	SiteInfo buf[256];
+	memset(buf, 0, sizeof(buf));
+
+	//判断管理员信息是否存在，并存入结构体变量
+	if (isAdminExist(AdminNodehead, adminID) == FALSE) return buf;//不存在，返回空数组
+	AdminInfo adminInfo = queryAdminInfo(AdminNodehead, adminID);//存在，保存管理员信息备用
+	//缓存管理员所管的场馆ID
+	char adminVenueID[11];
+	memcpy(adminVenueID, &adminInfo.adminVenueID, sizeof(adminInfo.adminVenueID) / sizeof(adminInfo.adminVenueID[0]));
+	//通过场馆ID查询场地ID并缓存，同时纪录场地数量
+	SiteInfo* Sitebuf;
+	Sitebuf = querySiteIDByVenueID(SiteNodehead, adminVenueID);
+	int SiteBufSize = sizeof(Sitebuf) / sizeof(Sitebuf[0]);
+
+	int* turnoverBuf;
+	turnoverBuf = (int*)calloc(SiteBufSize, sizeof(int));
+	for (int i = 0; i < SiteBufSize; i++)
+	{
+		Sitebuf[i].turnover = cntSiteTurnover(AdminNodehead, Sitebuf[i].siteID);
+	}
+	sortStructArray(Sitebuf, SiteBufSize);
+
+	return Sitebuf;
+}
+
+//fuc8输入时间，返回一小时内有预约的场地数组
+//main
+SiteInfo* querySiteByTime(int startTime)
+{
+
+}
+
+int addSite()
+{
+
+}
+
+int InsertToSiteInfo(UserInfoNode* head, UserInfo info) {
+	/*
+	 * @brief		向 用户信息表 新增一条数据
+	 * @param		用户信息表头节点，UserInfo结构体
+	 * @note		用户ID为查询主键，请在插入前确认该值唯一
+	 * @return		成功: 0; 用户已存在: 1;
+	 */
+	if (isUserExist(head, info.usrID) == TRUE) return 1;
+	UserInfoNode* newline = malloc(sizeof(UserInfoNode));
+	newline->next = NULL;
+	newline->usrInfo = info;
+	UserInfoNode* move = head;
+	while (move->next != NULL) {
+		move = move->next;
+	}
+	move->next = newline;
+	return 0;
 }

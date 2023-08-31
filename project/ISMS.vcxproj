@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\codefiles\ISMS-2023Computer internship program\ISMS\ISMS\Inc;$(IncludePath)</IncludePath>
-    <ReferencePath>D:\codefiles\ISMS-2023Computer internship program\ISMS\ISMS\Inc;$(ReferencePath)</ReferencePath>
+    <IncludePath>D:\codefiles\ISMS-Team_repo\ISMS-BUPT-International College Term Project\Inc;$(IncludePath)</IncludePath>
+    <ReferencePath>D:\codefiles\ISMS-Team_repo\ISMS-BUPT-International College Term Project\Inc;$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -1,5 +1,5 @@
-//	Date: 20230831 ½ùºÆÈ»
-
+//	//Date: 20230831 ½ùºÆÈ»
+//
 //#ifndef __STRYCTDEF_H
 //#define __STRYCTDEF_H
 //

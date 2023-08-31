@@ -74,6 +74,7 @@ typedef struct _SiteInfo
 	char siteIntro[101];				//场地简介，100个字符以内
 	int siteAllowedAge;					//场地准入年龄，整型
 	int siteUsedTimes;					//场地被预约次数，整型
+	int turnover;						//场地营业额(=场地订单总小时数*每小时订金)  可由admin.c中函数cntSiteTurnover计算得到
 } SiteInfo;
 
 //场地信息链表节点
@@ -94,6 +95,7 @@ typedef struct _AppointmentInfo
 	char apmtStartDateh[11];			//预约的开始时间，格式yyyymmddhh(eg. 2023082909)，注意h不是误拼
 	int apmtDurationh;					//预约持续时长，小时，整型，注意h不是误拼
 	int apmtUsrGender;					//预约用户的性别，方便统计用，规定0为男，1为女
+	int apmtUserAge;					//预约用户的年龄
 	BOOL isUsrPresent;					//用户是否到场
 } ApmtInfo;
 
