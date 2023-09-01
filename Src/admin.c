@@ -175,10 +175,15 @@ ApmtInfo* querySiteOrderInfo(AdminInfoNode* AdminNodehead,SiteInfoNode* SiteNode
 
 //fuc3 coding 按预定量排序场地 复用用户系统中的函数
 
-
-
-//fuc4 done
-//统计各时段的预约量
+/**
+  * @Brief			统计各时段的预约量
+  * @Description	建立一个长度为16的数组，分别对应从6：00到22：00
+  *					之间16个时段，统计特定场地各时段预约情况
+  * @param[in]		head		：订单链表头结点
+  * @param[in]		strSiteID	：场地ID
+  * @param[out]		buf
+  * @retval			按6：00到22：00顺序，返回统计结果
+  */
 int* cntSiteTime(AppointmentInfoNode* head,char strSiteID[11])
 {
 	int buf[16];//时段，从6到22共16个时段
@@ -189,7 +194,7 @@ int* cntSiteTime(AppointmentInfoNode* head,char strSiteID[11])
 	while (move != NULL) {
 		if (strcmp(move->next->apmtInfo.apmtSiteID, strSiteID) == 0)
 		{
-			int startTime = atoi(&move->apmtInfo.apmtStartDateh[8]);
+			int startTime = atoi(&move->apmtInfo.apmtStartDateh[8]);//下标为8时，对应时间信息中小时信息
 			int duration = move->apmtInfo.apmtDurationh;
 			for (int i = 0; i < duration; i++)
 			{
@@ -201,115 +206,137 @@ int* cntSiteTime(AppointmentInfoNode* head,char strSiteID[11])
 	return buf;
 }
 
-//数组排序函数，快排算法
-void quick_sort(int num[], int low, int high)
-{
-	int i, j, temp;
-	int tmp;
+////数组排序函数，快排算法
+//void quick_sort(int num[], int low, int high)
+//{
+//	int i, j, temp;
+//	int tmp;
+//
+//	i = low;
+//	j = high;
+//	tmp = num[low];   //任命为中间分界线，左边比他小，右边比他大,通常第一个元素是基准数
+//
+//	if (i > j)  //如果下标i大于下标j，函数结束运行
+//	{
+//		return;
+//	}
+//
+//	while (i != j)
+//	{
+//		while (num[j] >= tmp && j > i)
+//		{
+//			j--;
+//		}
+//
+//		while (num[i] <= tmp && j > i)
+//		{
+//			i++;
+//		}
+//
+//		if (j > i)
+//		{
+//			temp = num[j];
+//			num[j] = num[i];
+//			num[i] = temp;
+//		}
+//	}
+//
+//	num[low] = num[i];
+//	num[i] = tmp;
+//
+//	quick_sort(num, low, i - 1);
+//	quick_sort(num, i + 1, high);
+//}
+//
+///**
+//  * @Brief			对特定场地的预定时间进行排序
+//  * @Description	先使用 cntSiteTime（在此文件定义） 函数，
+//  *					对特定场地各时段预约订单数进行统计，存入 sortBuf 缓存区
+//  *					再进行快排，返回排序后的数组
+//  * @param[in]		head		：订单链表头结点
+//  * @param[in]		strSiteID	：场地ID
+//  * @param[out]		sortBuf		：排序后的各时间段内预约量数组
+//  * @retval			一个长度为16的数组，分别储存6-22点16个时段的
+//  */
+//int* sortSiteHotTime(AppointmentInfoNode* head,char strSiteID[11])
+//{
+//	int* sortBuf;
+//	//根据场地id查询场地信息，返回一个场地信息结构体
+//	sortBuf = cntSiteTime(head,strSiteID);
+//	quick_sort(sortBuf, 0, 16 - 1);
+//	return sortBuf;
+//}
 
-	i = low;
-	j = high;
-	tmp = num[low];   //任命为中间分界线，左边比他小，右边比他大,通常第一个元素是基准数
-
-	if (i > j)  //如果下标i大于下标j，函数结束运行
-	{
-		return;
-	}
-
-	while (i != j)
-	{
-		while (num[j] >= tmp && j > i)
-		{
-			j--;
-		}
-
-		while (num[i] <= tmp && j > i)
-		{
-			i++;
-		}
-
-		if (j > i)
-		{
-			temp = num[j];
-			num[j] = num[i];
-			num[i] = temp;
-		}
-	}
-
-	num[low] = num[i];
-	num[i] = tmp;
-
-	quick_sort(num, low, i - 1);
-	quick_sort(num, i + 1, high);
-}
-//main
 /**
-  * @Brief			对特定场地的预定时间进行排序
-  * @Description
-  * @param[in]		head		：
-  * @param[in]		strSiteID	：
-  * @param[out]		sortBuf		：
-  * @retval
+  * @Brief			计算特定场地营业额
+  * @Description	通过输入场地ID,查询该场地的 历史预约量，乘以租金，得到营业额
+  * @param[in]		head		：场地信息链表头结点
+  * @param[in]		strSiteID	：场地ID
+  * @param[out]		Turnover	：该场地的营业额，整型数
+  * @retval			返回特定场地的营业额
   */
-int* sortSiteHotTime(AppointmentInfoNode* head,char strSiteID[11])
+int cntSiteTurnover(SiteInfoNode* head,char strSiteID[11])
 {
-	int* sortBuf;
-	//根据场地id查询场地信息，返回一个场地信息结构体
-	sortBuf = cntSiteTime(head,strSiteID);
-	quick_sort(sortBuf, 0, 16 - 1);
-	return sortBuf;
-}
-
-//fuc5 计算场地营业额
-int cntSiteTurnover(AppointmentInfoNode* head, char strSiteID[11])
-{
+	SiteInfo buf;
 	int Turnover = 0;
-	int* cntBuf;
-	cntBuf = cntSiteTime(head, strSiteID);
-	Turnover *= RENT * (sizeof(cntBuf) / sizeof(cntBuf[0]));//todo:租金RENT未定义
+	buf = querySiteInfo(head, strSiteID);
+	Turnover = buf.siteUsedTimes * RENT;
+
 	return Turnover;
 }
 
+//fuc6 用户年龄层次分布、男女热门运动
 
-//fuc6
-
-//fuc7 按营业额排序场馆内所有场地
-
-//fuc7-1 结构体数组排序,倒序
 // 比较函数，用于排序
 int compare(const void* a, const void* b) {
 	return ((SiteInfo*)b)->turnover - ((SiteInfo*)a)->turnover;
 }
 
-// 函数：对结构体数组按照 turnover 排序
+// 函数：对结构体数组按照 turnover 排序，倒序
 void sortStructArray(struct SiteInfo arr[], int size) {
 	qsort(arr, size, sizeof(SiteInfo), compare);
 }
 
-//main
+/**
+  * @Brief			按营业额排序场馆内所有场地
+  * @Description	遍历管理员所管的所有场地，
+  *					输入管理员ID，首先判断是否存在管理员，
+  *					若存在，提取场馆ID查询场地ID并缓存，同时纪录场地数量
+  *					提取营业额信息用于对场地排序，返回场地信息结构体数组
+  * @Attention		使用需要判空，当管理员ID错误返回空数组
+  * @param[in]		AdminNodehead	：管理员链表头结点
+  * @param[in]		SiteNodehead	: 场地链表头结点
+  * @param[in]		ApmtNodehead	：订单链表头结点
+  *	@param[in]		adminID			：管理员ID
+  * @param[out]		Sitebuf			：缓存场地信息结构体数组指针
+  * @retval			返回按照营业额排序后的场地信息数组
+  */
 SiteInfo* sortSiteByTurnover(AdminInfoNode* AdminNodehead, SiteInfoNode* SiteNodehead, AppointmentInfoNode* ApmtNodehead, char adminID[11])
 {
 
-	SiteInfo buf[256];
+	SiteInfo buf[BUFSIZE];
 	memset(buf, 0, sizeof(buf));
 
 	//判断管理员信息是否存在，并存入结构体变量
-	if (isAdminExist(AdminNodehead, adminID) == FALSE) return buf;//不存在，返回空数组
+	if (isAdminExist(AdminNodehead, adminID) == FALSE) 
+		return buf;//不存在，返回空数组
 	AdminInfo adminInfo = queryAdminInfo(AdminNodehead, adminID);//存在，保存管理员信息备用
+	
 	//缓存管理员所管的场馆ID
 	char adminVenueName[11];
 	memcpy(adminVenueName, &adminInfo.adminVenueName, sizeof(adminInfo.adminVenueName) / sizeof(adminInfo.adminVenueName[0]));
+	
 	//通过场馆ID查询场地ID并缓存，同时纪录场地数量
 	SiteInfo* Sitebuf;
 	Sitebuf = querySiteInfoByVenueName(SiteNodehead, adminVenueName);
 	int SiteBufSize = sizeof(Sitebuf) / sizeof(Sitebuf[0]);
 
-	int* turnoverBuf;
-	turnoverBuf = (int*)calloc(SiteBufSize, sizeof(int));
 	for (int i = 0; i < SiteBufSize; i++)
 	{
 		Sitebuf[i].turnover = cntSiteTurnover(AdminNodehead, Sitebuf[i].siteID);
 	}
+
+	//对结构体数组倒序排序
 	sortStructArray(Sitebuf, SiteBufSize);
 
 	return Sitebuf;
@@ -322,26 +349,3 @@ SiteInfo* querySiteByTime(int startTime)
 
 }
 
-int addSite()
-{
-
-}
-
-int InsertToSiteInfo(UserInfoNode* head, UserInfo info) {
-	/*
-	 * @brief		向 用户信息表 新增一条数据
-	 * @param		用户信息表头节点，UserInfo结构体
-	 * @note		用户ID为查询主键，请在插入前确认该值唯一
-	 * @return		成功: 0; 用户已存在: 1;
-	 */
-	if (isUserExist(head, info.usrID) == TRUE) return 1;
-	UserInfoNode* newline = malloc(sizeof(UserInfoNode));
-	newline->next = NULL;
-	newline->usrInfo = info;
-	UserInfoNode* move = head;
-	while (move->next != NULL) {
-		move = move->next;
-	}
-	move->next = newline;
-	return 0;
-}
